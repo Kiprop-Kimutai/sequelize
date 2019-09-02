@@ -122,8 +122,13 @@ function insertCollections(collection, docs) {
 	console.log(docs);
 	collection.bulkCreate(docs).then(() => {
 		return new ApiResponse(true, '000', 'file upload success')
-	}).catch(err => {
-		return new ApiResponse(false, 500, err);
-	});
+	}, (err) => {
+		console.log(err.error);
+		return new ApiResponse(false, 400, err);
+	});/*.catch(err => {
+		console.log('----------');
+		console.log(err);
+		return new ApiResponse(false, 400, err);
+	});*/
 }
 module.exports = router;

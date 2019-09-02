@@ -5,6 +5,7 @@ var crypto = require('crypto');
 const Accessory = require('../models').Accessory;
 const Agent = require('../models').Agent;
 const Device = require('../models').Device;
+const Beneficiary = require('../models').Beneficiary;
 const File = require('../models').File;
 const ApiResponse = require('../classes/apiresponse');
 var router = express.Router();
@@ -42,18 +43,25 @@ router.post('/uploadfile', uploads.single('uploads[]', 1), async (req, res) => {
 						console.log(json);
 						switch (req.body.route) {
 							case 'agents':
-								res.status(201).json(insertCollections(Agent, json));
+								insertCollections(Agent, json).then((result) => {res.status(201).json(result)}, 
+								(err) => {res.status(201).json(err)});
 								break;
 							case 'devices':
-								res.status(201).json(insertCollections(Device, json));
+								insertCollections(Device, json).then(result => res.status(201).json(result), err => {
+									res.status(201).json(err)
+								});
 								break;
 							case 'accessories':
-								res.status(201).json(insertCollections(Accessory, json));
+								insertCollections(Accessory, json).then(result => res.status(201).json(result), err => {
+									res.status(201).json(err)
+								});
 								break;
 							case 'cycles':
 								// resolve(insertCollections(Cell, json));
 							case 'beneficiaries':
-								// resolve(insertCollections(Village, json));
+								insertCollections(Beneficiary, json).then(result => res.status(201).json(result), err => {
+									res.status(201).json(err)
+								});
 								break;
 							default:
 								res.status(201).json((ApiResponse(false, 310, 'no route supplied')));
@@ -75,11 +83,9 @@ router.post('/uploadfile', uploads.single('uploads[]', 1), async (req, res) => {
 
 //read file and get md5sum
  async function getFileMd5Sum(filename) {
-	 console.log('init...');
 	return new Promise(function (resolve, reject) {
 		fs.readFile('./server/uploads/' + filename, (err, data) => {
 			if (err) {
-				console.log.log(err);
 				reject(err);
 			}
 			else {
@@ -91,11 +97,13 @@ router.post('/uploadfile', uploads.single('uploads[]', 1), async (req, res) => {
 
 function insertCollections(collection, docs) {
 	// eslint-disable-next-line no-unused-vars
-	collection.bulkCreate(docs).then(() => {
-		return new ApiResponse(true, '000', 'file upload success')
-	}).catch(err => {
-		console.error(err);
-		return new ApiResponse(false, 500, err);
-	});
+	return new Promise((resolve, reject) => {
+		collection.bulkCreate(docs).then(() => {
+			resolve(new ApiResponse(true, '000', 'file upload success'));
+		}, (err) => {
+			reject(new ApiResponse(false, 300, err.errors));
+		});
+	})
+
 }
 module.exports = router;

@@ -1,23 +1,43 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Agents', {
+    return queryInterface.createTable('Beneficiaries', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      tillNumber: {
+      firstname: {
+        type: Sequelize.STRING
+      },
+      middlename: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      lastname: {
+        type: Sequelize.STRING
+      },
+      phone: {
         type: Sequelize.STRING,
         unique: true
       },
-      msisdn: {
+      idnumber: {
         type: Sequelize.STRING,
         unique: true
       },
-      active: {
+      county: {
+        type: Sequelize.STRING,
+      },
+      status: {
         type: Sequelize.BOOLEAN
+      },
+      cardnumber: {
+        type: Sequelize.STRING,
+        unique: true
+      },
+      programvalidity: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -30,6 +50,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Agents');
+    return queryInterface.dropTable('Beneficiaries');
   }
 };

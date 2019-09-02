@@ -2,6 +2,7 @@ const todosControllers = require('../controllers/todos');
 const todoItemsController = require('../controllers/todoitems');
 const authController = require('../controllers/authentication');
 const agentController = require('../controllers/agent');
+const beneficiaryController = require('../controllers/beneficiary');
 const devicesController = require('../controllers/device');
 const accessoriesController = require('../controllers/accessory');
 const filescontroller = require('../controllers/abc');
@@ -35,10 +36,19 @@ router.put('/api/agents/:id', agentController.update);
 router.delete('/api/agents/:id/:msisdn', agentController.destroy);
 router.get('/api/agents/:id', agentController.retrieveOneAgent);
 router.get('/api/agents',agentController.list);
+
+//beneficiary routes
+router.post('/api/beneficiaries/', beneficiaryController.create);
+router.put('/api/beneficiaries/:id', beneficiaryController.update);
+router.delete('/api/beneficiaries/:id', beneficiaryController.destroy);
+router.get('/api/beneficiaries/:id', beneficiaryController.retrieveOneBeneficiary);
+router.get('/api/beneficiaries',beneficiaryController.list);
 //devices
 router.post('/api/devices', devicesController.create);
-router.get('/api/devices', auth, devicesController.list);  
+router.get('/api/devices', auth, devicesController.list);
 router.get('/api/devices/:id',auth, devicesController.retrieveOneDevice);
+router.put('/api/devices/:id',auth, devicesController.update);
+router.delete('/api/devices/:id/:serialno', devicesController.destroy);
 //accessories
 router.post('/api/accessories', accessoriesController.create);
 router.get('/api/accessories', accessoriesController.list);
