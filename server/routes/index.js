@@ -6,6 +6,10 @@ const beneficiaryController = require('../controllers/beneficiary');
 const devicesController = require('../controllers/device');
 const accessoriesController = require('../controllers/accessory');
 const filescontroller = require('../controllers/abc');
+const uploadFirmwareController = require('../controllers/firmwareuploadroutes');
+const firmwareController = require('../controllers/firmware');
+const regionsController = require('../controllers/regions');
+const deviceGroupController = require('../controllers/devicegroup');
 const express = require('express');
 const router = express.Router();
 var jwt = require('express-jwt');
@@ -54,8 +58,27 @@ router.post('/api/accessories', accessoriesController.create);
 router.get('/api/accessories', accessoriesController.list);
 router.put('/api/accessories/:id',accessoriesController.updateAccessory);
 router.put('/api/accessories/update/:deviceId',accessoriesController.updateAccessories);
+// firmware routes
+router.post('/api/firmware/', firmwareController.create);
+router.put('/api/firmware/:id', firmwareController.update);
+router.delete('/api/firmware/:id', firmwareController.destroy);
+router.get('/api/firmware/:id', firmwareController.retrieveOneFirmware);
+router.get('/api/firmware',firmwareController.list);
+// region routes
+router.post('/api/region/', regionsController.create);
+router.put('/api/region/:id', regionsController.update);
+router.delete('/api/region/:id', regionsController.destroy);
+router.get('/api/region/:id', regionsController.retrieveOneRegion);
+router.get('/api/region',regionsController.list);
+// device group routes
+router.post('/api/devicegroup/', auth, deviceGroupController.create);
+router.put('/api/devicegroup/:id', auth, deviceGroupController.update);
+router.delete('/api/devicegroup/:id', auth, deviceGroupController.destroy);
+router.get('/api/devicegroup/:id', deviceGroupController.retrieveOneDeviceGroup);
+router.get('/api/devicegroup', auth, deviceGroupController.list);
 //files
 router.use('/api/files',filescontroller);
+router.use('/api/firmware/', uploadFirmwareController);
 router.all('/api/todos/:todoId/items', (req, res) =>
 res.status(405).send({
   message: 'Method Not Allowed',

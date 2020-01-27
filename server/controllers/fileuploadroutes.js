@@ -30,8 +30,6 @@ router.post('/uploadfile', uploads.single('uploads[]', 1), (req, res) => {
 	else {
 		new Promise(function (resolve, reject) {
 			getFileMd5Sum(req.body.name).then(function (result) {
-				// eslint-disable-next-line no-unused-vars
-				var response = new ApiResponse('', '');
 				var file = new File({
 					name: req.body.name,
 					type: req.body.type,
@@ -86,9 +84,7 @@ router.post('/uploadfile', uploads.single('uploads[]', 1), (req, res) => {
 				}).catch(err => {
 					console.error(err);
 					reject(new ApiResponse(false, 300, 'Error saving file'));
-				}), (err, res) => {
-
-				});
+				}));
 				//console.log(JSON.stringify(response));
 			}, function (err) {
 				console.log(err);
